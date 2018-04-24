@@ -11,6 +11,11 @@ import { EstadisticasModuleComponent } from './estadisticas-module/estadisticas-
 import { EventosModuleComponent } from './eventos-module/eventos-module.component';
 import { ComidasModuleComponent } from './comidas-module/comidas-module.component';
 import { PerfilModuleComponent } from './perfil-module/perfil-module.component';
+import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
+import { BreadcrumbComponent } from './commons/breadcrumb/breadcrumb.component';
+import { PrincipalModuleComponent } from './principal-module/principal-module.component';
+import { RegistrarModuleComponent } from './registrar-module/registrar-module.component';
+
 
 
 @NgModule({
@@ -23,6 +28,10 @@ import { PerfilModuleComponent } from './perfil-module/perfil-module.component';
     EventosModuleComponent,
     ComidasModuleComponent,
     PerfilModuleComponent,
+    NotFoundPageComponent,
+    BreadcrumbComponent,
+    PrincipalModuleComponent,
+    RegistrarModuleComponent
   ],
   imports: [
     BrowserModule,
