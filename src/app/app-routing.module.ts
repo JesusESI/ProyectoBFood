@@ -14,7 +14,7 @@ import { NotFoundPageComponent } from "./not-found-page/not-found-page.component
 import { PerfilModuleComponent } from "./perfil-module/perfil-module.component"; 
 
 const routes: Routes = [
-  { path: 'login', component: LoginModuleComponent},
+  { path: '', component: LoginModuleComponent},
   { path: 'registrar', component: RegistrarModuleComponent},
   { path: 'principal', component: PrincipalModuleComponent},
   { path: 'gestionarBeacons', component: BeaconsModuleComponent},
