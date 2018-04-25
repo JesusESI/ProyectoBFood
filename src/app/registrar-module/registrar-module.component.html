@@ -1,38 +1,42 @@
 
-<!-- Módulo Login -->
+<!-- Módulo Registrar -->
 <div class="row">
   <div class="col-md-6 mx-auto mt-5">
     <div class="card">
       <div class="card-body">
         <h1 class="text-center">Registro</h1>
-        <form action="">
+        <!-- Usar el evento (submit) para enviar los datos al -->
+        <form (submit) = "mostrarDatos()">
           <div class="form-group">
             <label for="Nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" class="form-control">
+            <input type="text" name="nombre" id="nombre" class="form-control" [(ngModel)] ="nombre">
           </div>
           <div class="form-group">
             <label for="apellidos">Apellidos</label>
-            <input type="text" name="apellidos" id="apellidos" class="form-control">
+            <input type="text" name="apellidos" id="apellidos" class="form-control" [(ngModel)] ="apellidos">
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" name="email" id="email" class="form-control">
+            <input type="email" name="email" id="email" class="form-control" [(ngModel)] ="email">
           </div>
           <div class="form-group">
               <label for="usuario">Usuario</label>
-              <input type="text" name="usuario" id="usuario" class="form-control">
+              <input type="text" name="usuario" id="usuario" class="form-control" [(ngModel)] ="usuario">
           </div>
           <div class="form-group">
-                <label for="contraseña">Contraseña</label>
-                <input type="password" name="contraseña" id="contraseña" class="form-control">
+                <label for="password">Contraseña</label>
+                <input type="password" name="contraseña" id="contraseña" class="form-control" [(ngModel)] ="password">
           </div>
           <div class="form-group">
             <label for="repetirContraseña">Repetir Contraseña</label>
-              <input type="password" name="repetirContraseña" id="repetirContraseña" class="form-control">
+              <input type="password" name="repetirContraseña" id="repetirContraseña" class="form-control" [(ngModel)] =  "repeatPassword">
           </div>
-
-          <input type="button" value="Registrarse" class="btn btn-info btn-block btn-lg">  
-          <input type="button" value="Cancelar" class="btn btn-primary btn-block btn-lg">   
+          
+          <input type="submit" value="Registrarse" class="btn btn-info btn-block btn-lg">  
+          <!-- Ajustarlo -->
+          <div class="mx-auto mt-2">
+              <a href="/" class="list-group-item list-group-item-action active cancelar">Volver</a>
+          </div>
         </form>
       </div>
     </div>
