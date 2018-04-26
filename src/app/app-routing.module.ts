@@ -13,16 +13,21 @@ import { EventosModuleComponent } from "./eventos-module/eventos-module.componen
 import { NotFoundPageComponent } from "./not-found-page/not-found-page.component";
 import { PerfilModuleComponent } from "./perfil-module/perfil-module.component"; 
 
+// Importar guard
+import { AuthGuard } from "./guards/auth.guard";
+
 const routes: Routes = [
   { path: '', component: LoginModuleComponent},
   { path: 'registrar', component: RegistrarModuleComponent},
-  { path: 'principal', component: PrincipalModuleComponent},
-  { path: 'gestionarBeacons', component: BeaconsModuleComponent},
-  { path: 'gestionarUsuarios', component: UsuariosModuleComponent},
-  { path: 'gestionarComidas', component: ComidasModuleComponent},
-  { path: 'estadisticas', component: EstadisticasModuleComponent},
-  { path: 'gestionarEventos', component: EventosModuleComponent},
-  { path: 'administrarPerfil', component: PerfilModuleComponent},
+  { path: 'principal', component: PrincipalModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/gestionarBeacons', component: BeaconsModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/gestionarUsuarios', component: UsuariosModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/gestionarComidas', component: ComidasModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/gestionarComidas', component: ComidasModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/estadisticas', component: EstadisticasModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/estadisticas', component: EstadisticasModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/gestionarEventos', component: EventosModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/administrarPerfil', component: PerfilModuleComponent, canActivate:[AuthGuard]},
   { path: '**', component: NotFoundPageComponent}
 ];
 

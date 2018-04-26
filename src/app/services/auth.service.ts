@@ -6,17 +6,28 @@ import * as firebase from 'firebase/app';
 
 // Este import proporciona la capacidad de hacer llamadas asincronas que permite tener los datos actualizados en tiempo real.
 import 'rxjs/add/operator/map';
+import { FirebaseApp } from 'angularfire2';
 
 @Injectable()
 export class AuthService {
 
+  // Variable de sesión.
+   private _isSignedIn: boolean;
+
   // Inyección de dependencias.
   constructor(
-    public serviceAuth: AngularFireAuth
+    public serviceAuth: AngularFireAuth,
   ) { }
 
-  // Consultar metodos en la página de firebase --> guías.
+  get isSignedIn(): boolean {
+    return this._isSignedIn;
+  }
 
+  set isSignedIn(signed: boolean) {
+    this._isSignedIn = signed;
+  }
+
+  // Consultar metodos en la página de firebase --> guías.
   logout(){
     // Método de auth que cierra la sesión
     return this.serviceAuth.auth.signOut();

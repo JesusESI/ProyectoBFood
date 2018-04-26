@@ -13,7 +13,6 @@ import { EventosModuleComponent } from './eventos-module/eventos-module.componen
 import { ComidasModuleComponent } from './comidas-module/comidas-module.component';
 import { PerfilModuleComponent } from './perfil-module/perfil-module.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
-import { BreadcrumbComponent } from './commons/breadcrumb/breadcrumb.component';
 import { PrincipalModuleComponent } from './principal-module/principal-module.component';
 import { RegistrarModuleComponent } from './registrar-module/registrar-module.component';
 
@@ -24,6 +23,9 @@ import { AngularFireAuthModule } from "angularfire2/auth";
 
 // Importar configuración del environment.
 import { environment } from "../environments/environment";
+
+// Importar guard
+import { AuthGuard } from "./guards/auth.guard";
 
 @NgModule({
   declarations: [
@@ -36,7 +38,6 @@ import { environment } from "../environments/environment";
     ComidasModuleComponent,
     PerfilModuleComponent,
     NotFoundPageComponent,
-    BreadcrumbComponent,
     PrincipalModuleComponent,
     RegistrarModuleComponent
   ],
@@ -48,7 +49,8 @@ import { environment } from "../environments/environment";
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
