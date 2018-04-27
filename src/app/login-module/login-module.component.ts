@@ -6,6 +6,9 @@ import { AuthService } from "../services/auth.service";
 // Importar Router, para redirecionarnos.
 import { Router } from "@angular/router";
 
+// Importar componentes comunes
+import { NavbarComponent } from "../comun/navbar/navbar.component";
+
 @Component({
   selector: 'app-login-module',
   templateUrl: './login-module.component.html',
@@ -42,8 +45,7 @@ export class LoginModuleComponent implements OnInit {
       })
   }
 
-  /*setAuthenticated() {
-    console.log("No autenticado");
-    this.notAuthenticated = false;
-  }*/
+  onRegistrar() {
+    this.router.navigate(['/registrar']);
+  }
 }

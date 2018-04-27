@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
       if (this.authService.isSignedIn) {
         return true;
       } else {
-        this.router.navigate(['']);
+        this.router.navigate(['/privado']);
         return false;
       }
   }

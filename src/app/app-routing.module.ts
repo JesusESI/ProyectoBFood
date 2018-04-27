@@ -12,6 +12,8 @@ import { EstadisticasModuleComponent } from "./estadisticas-module/estadisticas-
 import { EventosModuleComponent } from "./eventos-module/eventos-module.component";
 import { NotFoundPageComponent } from "./not-found-page/not-found-page.component";
 import { PerfilModuleComponent } from "./perfil-module/perfil-module.component"; 
+import { PrivadoComponent } from "./comun/privado/privado.component";
+import { RegistradoCorrectamenteComponent } from './comun/registrado-correctamente/registrado-correctamente.component';
 
 // Importar guard
 import { AuthGuard } from "./guards/auth.guard";
@@ -19,6 +21,8 @@ import { AuthGuard } from "./guards/auth.guard";
 const routes: Routes = [
   { path: '', component: LoginModuleComponent},
   { path: 'registrar', component: RegistrarModuleComponent},
+  { path: 'privado', component: PrivadoComponent},
+  { path: 'registrado', component: RegistradoCorrectamenteComponent},
   { path: 'principal', component: PrincipalModuleComponent, canActivate:[AuthGuard]},
   { path: 'principal/gestionarBeacons', component: BeaconsModuleComponent, canActivate:[AuthGuard]},
   { path: 'principal/gestionarUsuarios', component: UsuariosModuleComponent, canActivate:[AuthGuard]},

@@ -15,6 +15,7 @@ import { PerfilModuleComponent } from './perfil-module/perfil-module.component';
 import { NotFoundPageComponent } from './not-found-page/not-found-page.component';
 import { PrincipalModuleComponent } from './principal-module/principal-module.component';
 import { RegistrarModuleComponent } from './registrar-module/registrar-module.component';
+import { PrivadoComponent } from './comun/privado/privado.component';
 
 // Import mportamosI los servicios (providers).
 import { AuthService } from "./services/auth.service";
@@ -26,6 +27,9 @@ import { environment } from "../environments/environment";
 
 // Importar guard
 import { AuthGuard } from "./guards/auth.guard";
+import { RegistradoCorrectamenteComponent } from './comun/registrado-correctamente/registrado-correctamente.component';
+import { NavbarComponent } from './comun/navbar/navbar.component';
+
 
 @NgModule({
   declarations: [
@@ -39,7 +43,11 @@ import { AuthGuard } from "./guards/auth.guard";
     PerfilModuleComponent,
     NotFoundPageComponent,
     PrincipalModuleComponent,
-    RegistrarModuleComponent
+    RegistrarModuleComponent,
+    PrivadoComponent,
+    PrivadoComponent,
+    RegistradoCorrectamenteComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

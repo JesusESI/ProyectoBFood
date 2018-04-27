@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 // Importar servicio Auth
 import { AuthService } from "../services/auth.service";
 
-// import Router, para redirecionarnos.
+// Importar Router, para redirecionarnos.
 import { Router } from "@angular/router";
 
 @Component({
@@ -13,13 +13,19 @@ import { Router } from "@angular/router";
 })
 export class RegistrarModuleComponent implements OnInit {
 
-  // Variables de la vista.
+  // Variables de la vista(provisional, crear oibjeto usuario).
   public nombre: string;
   public apellidos: string;
   public email: string;
   public usuario: string;
   public password: string;
   public repeatPassword: string;
+
+  // Flags
+  private enableAlert: boolean;
+
+  // Mensaje.
+  private message: string;
 
   // Inyección servicio Auth.
   constructor(
@@ -28,10 +34,67 @@ export class RegistrarModuleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this.enableAlert = false;
   }
 
   onSubmitRegisterAddUser() {
+    // Comprobar que las contrseñas coincidan y que todos los campos estén completos.
+    let flag: boolean = true;
+    
+    flag = this.checkFields();
+    
+    if (flag) {
+      
+      flag = this.checkPassword();
+
+      if (flag) {
+        this.addUser();
+      } else {
+        this.enableAlert = true;
+        this.message = "Compruebe que las contraseñas son iguales."
+      }
+    } else {
+      // Crear mensaje de alerta y activarlo.
+      this.enableAlert = true;
+      this.message = "Todos los campos son obligatorios."
+    }
+    
+  }
+
+  checkPassword(): boolean {
+    if(this.password === this.repeatPassword) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkFields(): boolean {
+    if ((this.nombre && this.apellidos && this.email && this.usuario && this.password && this.repeatPassword) !== undefined) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  checkErr(err: any) {
+    this.enableAlert = true;
+
+    if (err.code === "auth/invalid-email") {
+      this.message = "Formato del email incorrecto."
+    }
+
+    if (err.code === "auth/weak-password") {
+      this.message = "La contraseña debe tener al menos 6 caracteres."
+    }
+
+    if (err.code === "auth/email-already-in-use") {
+      this.message = "Ya existe un usuario con este email."
+    }
+  }
+
+  addUser() {
+    // Esto deberia ir en el userDAO.
     console.log("Función onSubmitRegisterAddUser() ejecutandose...");
     // Mostrar por la consola la respuesta de firebase, controlado por manejador
     this.authService.registerUser(this.email, this.password)
@@ -39,17 +102,27 @@ export class RegistrarModuleComponent implements OnInit {
         console.log('Usuario registrado correctamente.');
         console.log(res);
         // Programar un alert para decirle al usuario que se ha registrado correctamente.
-        this.router.navigate(['/']);
+        this.router.navigate(['registrado']);
       }).catch( 
         (err) => {
           console.log(err);
-          // Programar un alert para decirle al usuario que no s eha podido registrar.
+          this.checkErr(err);
         }
       )
   }
 
+  closeAlert() {
+    // Cerramos la alerta y reseteamos las variables.
+    this.enableAlert = false;
+    this.message = "";
+  }
+
+  onVolver() {
+    this.router.navigate(['']);
+  }
+
   // Método de prueba
-  mostrarDatos() {
+  /*mostrarDatos() {
     console.log(this.nombre);
     console.log(this.apellidos);
     console.log(this.email);
@@ -57,6 +130,6 @@ export class RegistrarModuleComponent implements OnInit {
     console.log(this.password);
     console.log(this.repeatPassword);
     this.onSubmitRegisterAddUser();
-  }
+  }*/
 
 }
