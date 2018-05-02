@@ -1,1 +1,61 @@
-<img width="100%" src="../../assets/Images/en-construccion.jpg" alt="En construccion">
+
+<div class="container">
+    <!-- Navbar -->
+    <app-navbar></app-navbar>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Principal</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-lg-center">
+        <div class="col-md-3 col-lg-3 mt-5">
+                    <button class="btn btn-outline-dark" (click) = "onClickUsuarios()">
+                        <h5>Usuarios</h5>  
+                        <img src="../../assets/Images/IconoUsuario.png" width="150" height="150"/>
+                    </button>
+        </div>
+        <div class="col-md-3 col-lg-3 mt-5">
+                <button class="btn btn-outline-dark" (click) = "onClickSignal()">
+                    <h5>Beacons</h5>  
+                    <img src="../../assets/Images/IconoSignal.png" width="150" height="150"/>
+                </button>
+        </div>
+        <div class="col-md-3 col-lg-3 mt-5">
+                <button class="btn btn-outline-dark" (click) = "onClickEstadisticas()">
+                    <h5>Estadísticas</h5>  
+                    <img src="../../assets/Images/IconoBarras.png" width="150" height="150"/>
+                </button>
+        </div> 
+    </div>
+
+    <div class="row justify-content-lg-center">
+            <div class="col-md-3 col-lg-3 mt-5">
+                <button class="btn btn-outline-dark" (click) = "onClickEventos()">
+                    <h5>Eventos</h5>  
+                    <img src="../../assets/Images/IconoEvento.png" width="150" height="150"/>
+                </button>        
+            </div> 
+
+            <div class="col-md-3 col-lg-3 mt-5">
+                    <button class="btn btn-outline-dark" (click) = "onClickComidas()">
+                        <h5>Comidas</h5>  
+                        <img src="../../assets/Images/IconoComida.png" width="150" height="150"/>
+                    </button>        
+            </div> 
+
+            <div class="col-md-3 col-lg-3 mt-5" (click) = "onClickPerfil()">
+                    <button class="btn btn-outline-dark">
+                        <h5>Perfil</h5>  
+                        <img src="../../assets/Images/IconoPerfil.png" width="150" height="150"/>
+                    </button>        
+            </div> 
+    </div>  
+</div>
+
+
+
+
+
