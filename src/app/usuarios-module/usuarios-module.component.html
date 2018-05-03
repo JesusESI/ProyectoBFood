@@ -1,3 +1,138 @@
-<p>
-  usuarios-module works!
-</p>
+
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Principal</li>
+        <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+    </ol>
+</nav>
+
+<p-accordion [multiple]="true">
+    <!-- Filtro de Busqueda -->
+    <p-accordionTab header = "Filtrar Usuarios" [selected] = "true">
+        <form action="onBuscar()">
+            <div class="row">
+                <div class="col">
+                    <label for="nombre">Email</label>
+                    <input type="email" name="email" pTooltip="Email usuario" id="email"  class="form-control" [(ngModel)] = "email">
+                </div>
+                <div class="col">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name ="nombre" pTooltip="Nombre usuario" id="nombre"  class="form-control" [(ngModel)] = "nombre">
+                </div>
+                <div class="col">
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" name="apellidos" pTooltip="Apellidos usuario" id="apellidos"  class="form-control" [(ngModel)] = "apellidos">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mt-3">
+                    <input type="submit" value="Buscar" class="btn btn-outline-info btn-lg">
+                </div>
+            </div>
+    </form>
+    </p-accordionTab>
+    <!-- Tabla de usuarios -->
+    <p-accordionTab header = "Tabla de usuarios" [selected] = "true">
+        <p-table [value]="usuarios"  [paginator]="true" [rows]="9">
+            <ng-template pTemplate="header" >
+                    <tr>
+                        <th *ngFor="let col of cols">
+                            {{col.header}}
+                        </th>
+                        <th style="width:3em"></th>
+                        <th style="width:3em"></th>
+                        <th style="width:3em"></th>
+                    </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-usuario>
+                <tr>
+                    <td *ngFor="let col of cols">
+                        {{usuario[col.field]}}
+                    </td>
+                    <td>
+                        <button type="text" (click)="displayVentanaUsuario()" pButton  icon="fa-search"  title="Consultar" class="ui-button-info"></button>
+                    </td>
+                    <td>
+                        <button pButton (onClick)="count()" icon="fa-edit" title="Editar" class="ui-button-success"></button>
+                    </td>
+                    <td>
+                        <button pButton (onClick)="count()" icon="fa-remove" title="Borrar"  class="ui-button-danger"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-accordionTab>
+</p-accordion>
+
+<!-- Overlays -->
+<p-dialog header="Usuario" [(visible)]="displayUsuario" [width]="400" [modal]="true" [responsive]="true">
+        <form>
+            <fieldset>
+                  <!-- Imagen de prueba -->
+                  <div class="form-group">
+                        <div class="row justify-content-lg-center justify-content-md-center">
+                                <!-- <img style="width: 75%; height: 75%; display: block;" src="../../assets/Images/Logotipo.png" alt="Card image"> -->
+                                
+                        </div>
+                        <label for="exampleInputFile">Subir imagen</label>
+                            <input type="file" class="form-control-file" id="InputFile" aria-describedby="fileHelp">
+                            <small id="fileHelp" class="form-text text-muted">Foto de usuario, que le servirá de avatar en la aplicación.</small>
+                </div>
+                    
+                  <!-- Email estático-->
+                    <!-- <div class="form-group row">
+                        <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="email@example.com">
+                            </div>
+                    </div> -->
+                    <!-- Input nombre -->
+                    <div class = "form-group row">
+                        <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="nombreForm" aria-describedby="nombre" placeholder="Nombre usuario">
+                        </div>
+                    </div>
+                    <!-- Input apellidos -->
+                    <div class = "form-group row">
+                        <label for="apellidos" class="col-sm-2 col-form-label">Apellidos</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="apellidosForm" aria-describedby="apellidos" placeholder="Apellidos usuario">
+                        </div>
+                    </div>
+                    <!-- Input email -->
+                    <div class = "form-group row">
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="emailForm" aria-describedby="Email usuario" placeholder="Email usuario">
+                        </div>
+                    </div>
+                    <!-- Input usuario -->
+                    <div class = "form-group row">
+                        <label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
+                        <div class="col-sm-10">
+                                <input type="text" class="form-control" id="usuarioForm" aria-describedby="usuario" placeholder="Apodo usuario">
+                        </div>
+                    </div>
+                    <!-- Input usuario -->
+                    <div class = "form-group row">
+                        <label for="password" class="col-sm-2 col-form-label">Password</label>
+                            <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="passwordForm" aria-describedby="password" placeholder="Contraseña usuario">
+                            </div>
+                    </div>
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-3-right">
+                                <button type="submit" class="btn btn-info">Aceptar</button>
+                                <button type="button" (click) = "closeVentanaUsuario()" class="btn btn-primary .botones">Cancelar</button>
+                        </div>
+                    </div>
+                </fieldset>
+              </form>
+</p-dialog>
+
+    

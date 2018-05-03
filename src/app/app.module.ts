@@ -16,6 +16,17 @@ import { NotFoundPageComponent } from './not-found-page/not-found-page.component
 import { PrincipalModuleComponent } from './principal-module/principal-module.component';
 import { RegistrarModuleComponent } from './registrar-module/registrar-module.component';
 import { PrivadoComponent } from './comun/privado/privado.component';
+import { DialogModule } from 'primeng/dialog';
+import { AccordionModule } from 'primeng/primeng';
+import { PanelModule } from 'primeng/primeng';
+import { ButtonModule } from 'primeng/primeng';
+import { RadioButtonModule } from 'primeng/primeng';
+import { TableModule } from 'primeng/table';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip'
+
 
 // Import mportamosI los servicios (providers).
 import { AuthService } from "./services/auth.service";
@@ -29,6 +40,7 @@ import { environment } from "../environments/environment";
 import { AuthGuard } from "./guards/auth.guard";
 import { RegistradoCorrectamenteComponent } from './comun/registrado-correctamente/registrado-correctamente.component';
 import { NavbarComponent } from './comun/navbar/navbar.component';
+import { UserService } from './services/user.service';
 
 
 @NgModule({
@@ -45,7 +57,6 @@ import { NavbarComponent } from './comun/navbar/navbar.component';
     PrincipalModuleComponent,
     RegistrarModuleComponent,
     PrivadoComponent,
-    PrivadoComponent,
     RegistradoCorrectamenteComponent,
     NavbarComponent
   ],
@@ -54,10 +65,21 @@ import { NavbarComponent } from './comun/navbar/navbar.component';
     AppRoutingModule,
     FormsModule,
     AngularFireAuthModule,
+    DialogModule,
+    AccordionModule,
+    PanelModule,
+    ButtonModule,
+    TableModule,
+    AccordionModule,
+    BrowserAnimationsModule,
+    OverlayPanelModule,
+    DialogModule,
+    TooltipModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [
     AuthService,
+    UserService,
     AuthGuard
   ],
   bootstrap: [AppComponent]
