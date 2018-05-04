@@ -26,12 +26,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip'
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule}  from 'primeng/message';
 
 
 // Import mportamosI los servicios (providers).
 import { AuthService } from "./services/auth.service";
 import { AngularFireModule } from "angularfire2"
 import { AngularFireAuthModule } from "angularfire2/auth";
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 // Importar configuración del environment.
 import { environment } from "../environments/environment";
@@ -41,6 +44,7 @@ import { AuthGuard } from "./guards/auth.guard";
 import { RegistradoCorrectamenteComponent } from './comun/registrado-correctamente/registrado-correctamente.component';
 import { NavbarComponent } from './comun/navbar/navbar.component';
 import { UserService } from './services/user.service';
+
 
 
 @NgModule({
@@ -65,6 +69,7 @@ import { UserService } from './services/user.service';
     AppRoutingModule,
     FormsModule,
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
     DialogModule,
     AccordionModule,
     PanelModule,
@@ -75,6 +80,8 @@ import { UserService } from './services/user.service';
     OverlayPanelModule,
     DialogModule,
     TooltipModule,
+    MessageModule,
+    MessagesModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [

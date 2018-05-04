@@ -1,4 +1,3 @@
-
 <!-- Navbar -->
 <app-navbar></app-navbar>
 
@@ -9,6 +8,12 @@
         <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
     </ol>
 </nav>
+
+<!-- Alerta de acción -->
+<div *ngIf = "this.displayMsg" class="alert alert-dismissible alert-info">
+    <button type="button" (click) = "onCloseAlert()" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">{{msg}}</p>
+</div>
 
 <p-accordion [multiple]="true">
     <!-- Filtro de Busqueda -->
@@ -35,32 +40,34 @@
             </div>
     </form>
     </p-accordionTab>
+
     <!-- Tabla de usuarios -->
     <p-accordionTab header = "Tabla de usuarios" [selected] = "true">
-        <p-table [value]="usuarios"  [paginator]="true" [rows]="9">
-            <ng-template pTemplate="header" >
+        <p-table [value]="userList" [columns]="cols" [paginator]="true" [rows]="8" 
+         dataKey="email" >
+            <ng-template  pTemplate="caption">
+                <div class="ui-helper-clearfix">
+                    <button type="button" pButton icon="fa-plus" iconPos="left" label="Agregar" (click)="displayVentanaUsuario()" style="float:right"></button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns >
                     <tr>
-                        <th *ngFor="let col of cols">
+                        <th *ngFor="let col of columns">
                             {{col.header}}
                         </th>
                         <th style="width:3em"></th>
                         <th style="width:3em"></th>
-                        <th style="width:3em"></th>
                     </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-usuario>
-                <tr>
-                    <td *ngFor="let col of cols">
-                        {{usuario[col.field]}}
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <!-- Importante para la seleccion de las columnas -->
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">{{rowData[col.field]}}</td>
+                    <td>
+                        <button pButton (click)="displayVentanaUsuarioModificar(rowData)" icon="fa-edit" title="Editar" class="ui-button-success"></button>
                     </td>
                     <td>
-                        <button type="text" (click)="displayVentanaUsuario()" pButton  icon="fa-search"  title="Consultar" class="ui-button-info"></button>
-                    </td>
-                    <td>
-                        <button pButton (onClick)="count()" icon="fa-edit" title="Editar" class="ui-button-success"></button>
-                    </td>
-                    <td>
-                        <button pButton (onClick)="count()" icon="fa-remove" title="Borrar"  class="ui-button-danger"></button>
+                        <button pButton (click)= "onButtonRemove(rowData)" data-toggle="modal" data-target="#mensaje" icon="fa-remove" title="Borrar"  class="ui-button-danger"></button>
                     </td>
                 </tr>
             </ng-template>
@@ -70,10 +77,15 @@
 
 <!-- Overlays -->
 <p-dialog header="Usuario" [(visible)]="displayUsuario" [width]="400" [modal]="true" [responsive]="true">
-        <form>
+        <!-- Alert de campos -->
+        <div *ngIf="this.displayMsgAlert" class="alert alert-dismissible alert-primary">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{this.msg}}</strong> 
+        </div>
+        <form #userForm="ngForm" (ngSubmit) = "onSubmit(userForm)">
             <fieldset>
                   <!-- Imagen de prueba -->
-                  <div class="form-group">
+                    <div class="form-group">
                         <div class="row justify-content-lg-center justify-content-md-center">
                                 <!-- <img style="width: 75%; height: 75%; display: block;" src="../../assets/Images/Logotipo.png" alt="Card image"> -->
                                 
@@ -81,58 +93,92 @@
                         <label for="exampleInputFile">Subir imagen</label>
                             <input type="file" class="form-control-file" id="InputFile" aria-describedby="fileHelp">
                             <small id="fileHelp" class="form-text text-muted">Foto de usuario, que le servirá de avatar en la aplicación.</small>
-                </div>
+                    </div>
                     
-                  <!-- Email estático-->
-                    <!-- <div class="form-group row">
-                        <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="email@example.com">
-                            </div>
-                    </div> -->
-                    <!-- Input nombre -->
-                    <div class = "form-group row">
+                    <div class = "row form-group">
                         <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="nombreForm" aria-describedby="nombre" placeholder="Nombre usuario">
+                            <input type="text" class="form-control" 
+                            id="nombreForm" aria-describedby="nombre" 
+                            placeholder="Nombre usuario" 
+                            name="nombre" [(ngModel)] ="this.userService.selectedUser.nombre">
                         </div>
                     </div>
                     <!-- Input apellidos -->
                     <div class = "form-group row">
                         <label for="apellidos" class="col-sm-2 col-form-label">Apellidos</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="apellidosForm" aria-describedby="apellidos" placeholder="Apellidos usuario">
+                            <input type="text" class="form-control" 
+                            id="apellidosForm" aria-describedby="apellidos" 
+                            placeholder="Apellidos usuario"
+                            name="apellidos" [(ngModel)] ="this.userService.selectedUser.apellidos">
                         </div>
                     </div>
                     <!-- Input email -->
                     <div class = "form-group row">
                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="emailForm" aria-describedby="Email usuario" placeholder="Email usuario">
+                            <input type="email" class="form-control" 
+                            id="emailForm" aria-describedby="Email usuario" 
+                            placeholder="Email usuario"
+                            name="email" [(ngModel)] ="this.userService.selectedUser.email">
                         </div>
                     </div>
                     <!-- Input usuario -->
                     <div class = "form-group row">
                         <label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
                         <div class="col-sm-10">
-                                <input type="text" class="form-control" id="usuarioForm" aria-describedby="usuario" placeholder="Apodo usuario">
+                                <input type="text" class="form-control" 
+                                id="usuarioForm" aria-describedby="usuario" 
+                                placeholder="Apodo usuario"
+                                name="apodo" [(ngModel)] ="this.userService.selectedUser.apodo">
                         </div>
                     </div>
-                    <!-- Input usuario -->
+                    <!-- Input password -->
                     <div class = "form-group row">
                         <label for="password" class="col-sm-2 col-form-label">Password</label>
                             <div class="col-sm-10">
-                                    <input type="password" class="form-control" id="passwordForm" aria-describedby="password" placeholder="Contraseña usuario">
+                                    <input type="password" class="form-control" 
+                                    id="passwordForm" aria-describedby="password" 
+                                    placeholder="Contraseña usuario"
+                                    name="password" [(ngModel)] ="this.userService.selectedUser.password">
                             </div>
                     </div>
-                    <div class="row justify-content-md-center">
+                    <!-- <div class="form-group row justify-content-md-center">
                         <div class="col-md-3-right">
                                 <button type="submit" class="btn btn-info">Aceptar</button>
                                 <button type="button" (click) = "closeVentanaUsuario()" class="btn btn-primary .botones">Cancelar</button>
                         </div>
+                    </div> -->
+                    <div *ngIf= "this.displayUsuario" class="modal-footer">
+                            <button type="submit" class="btn btn-info">Aceptar</button>
+                            <button type="button" (click) = "closeVentanaUsuario()" class="btn btn-primary .botones">Cancelar</button>
                     </div>
                 </fieldset>
               </form>
 </p-dialog>
+
+<!-- Overlay confirmar eliminar -->
+<div class="modal" id="mensaje" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <i class="fa fa-warning" style="font-size:36px"></i>
+                </div>
+                <div class="col">
+                    <h4>¿Quiere confirmar la acción?</h4>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click) = "borrarUsuario()" class="btn btn-primary"  data-dismiss="modal">Aceptar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
     
