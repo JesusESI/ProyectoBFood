@@ -1,9 +1,26 @@
 <!-- Navbar -->
-<nav class="navbar navbar-dark bg-dark justify-content-between">
+<!-- <nav class="navbar navbar-dark bg-dark justify-content-between">
     
     <a class="navbar-brand" href="/principal">
         <img src="../../assets/Images/Hamburger_icon-icons.com.png" alt="">BFood
     </a>
+
+    <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <button type="button" (click) = "irPrincipal()" class="btn btn-link">Principal</button> 
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+     
 
        
     <form class="form-inline my-2 my-lg-0">
@@ -11,4 +28,43 @@
         Salir
       </button>        
     </form>
+  </div>
+</nav> -->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" [routerLink]="['/principal']">
+    <img src="../../assets/Images/Hamburger_icon-icons.com.png" alt="">BFood
+  </a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" style="">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/principal/gestionarUsuarios']">Usuarios</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/principal/gestionarBeacons']">Beacons</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/principal/estadisticas']">Estadísticas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/principal/gestionarEventos']">Eventos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/principal/gestionarComidas']">Comidas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/principal/administrarPerfil']">Perfil</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <button type="button" (click)="salir()" class="btn btn-outline-light btn-lg" >
+        Salir
+      </button> 
+    </form>
+  </div>
 </nav>

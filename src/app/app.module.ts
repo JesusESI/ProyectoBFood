@@ -35,6 +35,7 @@ import { AuthService } from "./services/auth.service";
 import { AngularFireModule } from "angularfire2"
 import { AngularFireAuthModule } from "angularfire2/auth";
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 // Importar configuración del environment.
 import { environment } from "../environments/environment";
@@ -44,6 +45,8 @@ import { AuthGuard } from "./guards/auth.guard";
 import { RegistradoCorrectamenteComponent } from './comun/registrado-correctamente/registrado-correctamente.component';
 import { NavbarComponent } from './comun/navbar/navbar.component';
 import { UserService } from './services/user.service';
+import { ImageService } from './services/image-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -82,9 +85,12 @@ import { UserService } from './services/user.service';
     TooltipModule,
     MessageModule,
     MessagesModule,
+    HttpClientModule,
+    AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [
+    ImageService,
     AuthService,
     UserService,
     AuthGuard

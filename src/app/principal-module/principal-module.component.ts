@@ -7,12 +7,23 @@ import { Router } from '@angular/router';
   styleUrls: ['./principal-module.component.scss']
 })
 export class PrincipalModuleComponent implements OnInit {
+  // Imagen loading.
+  //load: boolean = true;
+  //paginaActive: boolean = false;
 
   constructor(
     private router: Router
   ) { }
 
   ngOnInit() {
+    // Timer para mostrar la animacion de loading.
+    // let timerGift = setTimeout(() => 
+    //   this.load = false , 4000
+    // );
+
+    // let timerPagina = setTimeout(() =>
+    // this.paginaActive = true, 4000
+    // );
   }
 
   onClickUsuarios() {

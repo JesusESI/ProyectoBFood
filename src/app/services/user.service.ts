@@ -2,14 +2,19 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 
 import { User } from '../entidades/user';
+import { Query } from '@firebase/database/dist/src/api/Query';
+import { FirebaseDatabase } from '@firebase/database-types';
 
 @Injectable()
 export class UserService {
 
   // Listado usuarios obtenidos de firebase.
   userList: AngularFireList<any>;
-  selectedUser: User = new User(); 
-
+  selectedUser: User = new User();
+  
+  // Objeto query para realizar consultas.
+  query:  Query;
+  
   constructor(
     private firebase: AngularFireDatabase
   ) { }
@@ -26,7 +31,8 @@ export class UserService {
       apellidos: usuario.apellidos,
       apodo: usuario.apodo,
       email: usuario.email,
-      password: usuario.password
+      password: usuario.password,
+      imagen: "IconoUsuario.png"
     });
   }
 
@@ -36,7 +42,8 @@ export class UserService {
       apellidos: usuario.apellidos,
       apodo: usuario.apodo,
       email: usuario.email,
-      password: usuario.password
+      password: usuario.password, 
+      imagen: usuario.imagen
     });
   }
 

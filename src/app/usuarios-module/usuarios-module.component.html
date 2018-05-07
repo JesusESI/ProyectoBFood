@@ -21,21 +21,14 @@
         <form action="onBuscar()">
             <div class="row">
                 <div class="col">
-                    <label for="nombre">Email</label>
-                    <input type="email" name="email" pTooltip="Email usuario" id="email"  class="form-control" [(ngModel)] = "email">
-                </div>
-                <div class="col">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" name ="nombre" pTooltip="Nombre usuario" id="nombre"  class="form-control" [(ngModel)] = "nombre">
-                </div>
-                <div class="col">
-                    <label for="apellidos">Apellidos</label>
-                    <input type="text" name="apellidos" pTooltip="Apellidos usuario" id="apellidos"  class="form-control" [(ngModel)] = "apellidos">
-                </div>
+                    <label for="filtro">Filtro</label>
+                    <input type="text" name="text" pTooltip="filtro" id="filtro"  
+                    class="form-control" placeholder="<Todo>" [(ngModel)] = "this.filtro">
+               </div>
             </div>
             <div class="row">
                 <div class="col mt-3">
-                    <input type="submit" value="Buscar" class="btn btn-outline-info btn-lg">
+                    <input type="submit" (click)= "buscarUsuario()" value="Buscar" class="btn btn-outline-info btn-lg">
                 </div>
             </div>
     </form>
@@ -84,17 +77,17 @@
         </div>
         <form #userForm="ngForm" (ngSubmit) = "onSubmit(userForm)">
             <fieldset>
-                  <!-- Imagen de prueba -->
-                    <div class="form-group">
-                        <div class="row justify-content-lg-center justify-content-md-center">
-                                <!-- <img style="width: 75%; height: 75%; display: block;" src="../../assets/Images/Logotipo.png" alt="Card image"> -->
-                                
+                  <!-- Imagen -->
+                     <div class="row form-group justify-content-lg-center">
+                         <div class="col-md-7">
+                                <div class="container" *ngIf="this.imageService.downloadURL | async; let url">
+                                    <img style="width: 200px; height: 200px;" [src]="url" alt="Image from AngularFireStorage">
+                                </div> 
+                            <input type="file" (change)= "onFileSelected($event)" class="form-control-file" aria-describedby="fileHelp" accept=".png,.jpg">                            
+                            <progress max="100" [value]="(this.imageService.uploadProgress | async)"></progress>
                         </div>
-                        <label for="exampleInputFile">Subir imagen</label>
-                            <input type="file" class="form-control-file" id="InputFile" aria-describedby="fileHelp">
-                            <small id="fileHelp" class="form-text text-muted">Foto de usuario, que le servirá de avatar en la aplicación.</small>
-                    </div>
-                    
+                    </div> 
+                    <!--  Input nombre -->
                     <div class = "row form-group">
                         <label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
                         <div class="col-sm-10">

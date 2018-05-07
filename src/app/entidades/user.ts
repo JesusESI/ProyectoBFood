@@ -1,3 +1,5 @@
+import { Observable } from "rxjs/Observable";
+
 export class User {
 
     $key: string;
@@ -6,6 +8,8 @@ export class User {
     email: string;
     apodo: string;
     password: string;
+    // UrlImagen
+    imagen: string;
 
     constructor() {}
 

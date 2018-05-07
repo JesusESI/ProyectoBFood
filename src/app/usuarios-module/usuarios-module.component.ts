@@ -5,6 +5,8 @@ import { NgForm } from "@angular/forms";
 // Importamos nservicio del cliente.
 import { UserService } from '../services/user.service';
 import { element } from 'protractor';
+import { snapshotChanges } from 'angularfire2/database';
+import { ImageService } from '../services/image-service.service';
 
 @Component({
   selector: 'app-usuarios-module',
@@ -32,12 +34,14 @@ export class UsuariosModuleComponent implements OnInit {
   msg: string;
 
   // Campos del filtro.
-  email: string; 
-  nombre: string;
-  apellidos: string;
+  filtro: string; 
+
+  // Nombre imagen;
+  imagen: string;
 
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private imageService: ImageService
   ) { }
 
   ngOnInit() {
@@ -81,9 +85,10 @@ export class UsuariosModuleComponent implements OnInit {
   }
 
   checkForm(userForm: NgForm): boolean {
-    if ((userForm.value.nombre && userForm.value.apellidos && userForm.value.email && userForm.value.apodo && userForm.value.password) !== undefined ) {
-      if ((userForm.value.nombre && userForm.value.apellidos && userForm.value.email && userForm.value.apodo && userForm.value.password) !== "") {
-      
+    if ((userForm.value.nombre && userForm.value.apellidos && userForm.value.email 
+      && userForm.value.apodo && userForm.value.password) !== undefined ) {
+      if ((userForm.value.nombre && userForm.value.apellidos && userForm.value.email 
+        && userForm.value.apodo && userForm.value.password) !== "") {
         return true;
       } else {
         return false;
@@ -118,12 +123,14 @@ export class UsuariosModuleComponent implements OnInit {
   }
 
   displayVentanaUsuario(userForm: NgForm) {
+    this.imageService.obtenerReferenciaImagen("IconoUsuario.png");
     this.displayUsuario = true;
     // Limpar las variables también y cerrar ventana.
     this.resetForm(userForm);
   }
 
   displayVentanaUsuarioModificar(user: User) {
+    this.imageService.obtenerReferenciaImagen(user.imagen);
     this.displayUsuario = true;
     this.displayUsuarioModificar = true;
     // Ponemos los datos del usuario en el form.
@@ -140,6 +147,8 @@ export class UsuariosModuleComponent implements OnInit {
     // Limpar las variables también.
     this.resetForm(userForm);
     this.userService.selectedUser = new User();
+    this.imageService.downloadURL = null;
+    this.imageService.uploadProgress = null;
   }
 
   // Elimina al usuario.
@@ -161,8 +170,9 @@ export class UsuariosModuleComponent implements OnInit {
     this.selectedUserTable.email = userForm.value.email;
     this.selectedUserTable.apodo = userForm.value.apodo;
     this.selectedUserTable.password = userForm.value.password;
+    this.selectedUserTable.imagen = this.imagen;
 
-
+    console.log(this.selectedUserTable);
     this.msg = "El usuario ha sido modificado correctamente";
     this.displayMsg = true;
     
@@ -171,6 +181,29 @@ export class UsuariosModuleComponent implements OnInit {
     this.closeVentanaUsuario(userForm);
     this.resetForm();
    
+  }
+  // Busqueda al aplicar el filtro.
+  buscarUsuario() {
+    let auxUsuarios = [];
+    // Comprobamos que ningún campo del filtro esté vacio.
+    if (this.filtro !== undefined ) {
+      if (this.filtro !== "") {
+      // Hacemos las consultas desde la lista de usuarios ya obtenidas
+      let usuario = this.userList.filter( usuario => {
+
+        if (usuario.nombre == this.filtro || usuario.email == this.filtro 
+          || usuario.apellidos == this.filtro || usuario.apodo == this.filtro) {
+          //alert (usuario.email);
+          auxUsuarios.push(usuario);
+        }
+      });
+      this.userList = auxUsuarios;
+      } else {
+        this.obtenerUsuarios();
+      }
+    } else {
+      this.obtenerUsuarios();
+    }
   }
 
   // Pasa los datos del usuario a borrar
@@ -183,4 +216,14 @@ export class UsuariosModuleComponent implements OnInit {
     this.msg = ""
     this.displayMsg = false;
   }
+  // Seleccionar arhivo.
+  onFileSelected(event: any) {
+    console.log(event);
+    this.imageService.selectedImage = event.target.files[0];
+    this.imagen = event.target.files[0].name;
+    
+    // Cargamos la imagen
+    this.imageService.cargarImagen(event);
+  }
+
 }
