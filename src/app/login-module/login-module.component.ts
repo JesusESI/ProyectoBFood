@@ -29,6 +29,7 @@ export class LoginModuleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    
   }
 
   onSubmitLogin() {

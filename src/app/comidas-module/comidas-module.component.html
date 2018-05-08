@@ -1,3 +1,164 @@
-<p>
-  comidas-module works!
-</p>
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Principal</li>
+        <li class="breadcrumb-item active" aria-current="page">Comidas</li>
+    </ol>
+</nav>
+
+<!-- Alerta de acción -->
+<div *ngIf = "this.displayMsg" class="alert alert-dismissible alert-info">
+    <button type="button" (click) = "onCloseAlert()" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">{{msg}}</p>
+</div>
+
+<p-accordion [multiple]="true">
+    <!-- Filtro de Busqueda -->
+    <p-accordionTab header = "Filtrar Comida" [selected] = "true">
+        <form action="onBuscar()">
+            <div class="row">
+                <div class="col">
+                    <label for="filtro">Filtro</label>
+                    <input type="text" name="text" pTooltip="filtro" id="filtro"  
+                    class="form-control" placeholder="<Todo>" [(ngModel)] = "this.filtro">
+               </div>
+            </div>
+            <div class="row">
+                <div class="col mt-3">
+                    <input type="submit" (click)= "buscarComida()" value="Buscar" class="btn btn-outline-info btn-lg">
+                </div>
+            </div>
+    </form>
+    </p-accordionTab>
+
+    <!-- Tabla de Comidas -->
+    <p-accordionTab header = "Tabla de comidas" [selected] = "true">
+        <p-table [value]="comidaList" [columns]="cols" [paginator]="true" [rows]="8" dataKey="nombre" >
+            <ng-template  pTemplate="caption">
+                <div class="ui-helper-clearfix">
+                    <button type="button" pButton icon="fa-plus" iconPos="left" label="Agregar" (click)="displayVentanaComida()" style="float:right"></button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns >
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                        <th style="width:3em"></th>
+                        <th style="width:3em"></th>
+                    </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <!-- Importante para la seleccion de las columnas -->
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">
+                      {{rowData[col.field]}}
+                    </td>
+                    <td>
+                        <button pButton (click)="displayVentanaComidaModificar(rowData)" icon="fa-edit" title="Editar" class="ui-button-success"></button>
+                    </td>
+                    <td>
+                        <button pButton (click)= "onButtonRemove(rowData)" data-toggle="modal" data-target="#mensaje" icon="fa-remove" title="Borrar"  class="ui-button-danger"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-accordionTab>
+</p-accordion>
+
+<!-- Overlays -->
+<p-dialog header="Comidas" [(visible)]="displayComida" [width]="450" [modal]="true" [responsive]="true">
+        <!-- Alert de campos -->
+        <div *ngIf="this.displayMsgAlert" class="alert alert-dismissible alert-primary">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{this.msg}}</strong> 
+        </div>
+        <form #comidaForm="ngForm" (ngSubmit) = "onSubmit(comidaForm)">
+            <fieldset>
+                  <!-- Imagen -->
+                     <div class="row form-group justify-content-lg-center">
+                         <div class="col-md-6">
+                                <div class="container" *ngIf="this.imageService.downloadURL | async; let url">
+                                    <img style="width: 150px; height: 150px;" [src]="url" alt="Image from AngularFireStorage">
+                                </div> 
+                            <input type="file" (change)= "onFileSelected($event)" class="form-control-file" aria-describedby="fileHelp" accept=".png,.jpg">                            
+                            <progress max="100" [value]="(this.imageService.uploadProgress | async)"></progress>
+                        </div>
+                    </div> 
+                    <!--  Input nombre -->
+                    <div class = "row form-group">
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" 
+                            id="nombreForm" aria-describedby="nombre" 
+                            placeholder="Nombre comida" 
+                            name="nombre" [(ngModel)] ="this.comidaservice.selectedComida.nombre">
+                        </div>
+                    </div>
+                    <!-- Input tipo -->
+                    <div class="row form-group">
+                      <div class="col-sm-10">
+                      <select class="form-control" id="tipoSelect" placeholder="Tipo comida" 
+                      name="tipo" [(ngModel)] ="this.comidaservice.selectedComida.tipo">
+                        <option value="Variada">Variada</option>
+                        <option>Carne</option>
+                        <option>Pasta</option>
+                        <option>Pescado</option>
+                        <option>Vegetales</option>
+                        <option>Otros</option>
+                      </select>
+                      </div>
+                    </div>
+                    
+                    <!-- Input Ingredientes -->
+                    <div class = "form-group row">
+                        <div class="col-sm-10">
+                                <textarea class="form-control" 
+                                id="IngredientesForm" aria-describedby="Ingredientes" 
+                                placeholder="Ingredientes Comida" rows="3"
+                                name="ingredientes" [(ngModel)] ="this.comidaservice.selectedComida.ingredientes"></textarea>
+                        </div>
+                    </div>
+                    <!-- Input descripcion -->
+                    <div class = "form-group row">
+                            <div class="col-sm-10">
+                                    <textarea class="form-control" 
+                                    id="descripcionForm" aria-describedby="descripcion" 
+                                    placeholder="Descripcion Comida" rows="3"
+                                    name="descripcion" [(ngModel)] ="this.comidaservice.selectedComida.descripcion"></textarea>
+                            </div>
+                    </div>
+                    <div *ngIf= "this.displayComida" class="modal-footer">
+                            <button type="submit" class="btn btn-info">Aceptar</button>
+                            <button type="button" (click) = "closeVentanaComida()" class="btn btn-primary .botones">Cancelar</button>
+                    </div>
+                </fieldset>
+              </form>
+</p-dialog>
+
+<!-- Overlay confirmar eliminar -->
+<div class="modal" id="mensaje" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <i class="fa fa-warning" style="font-size:36px"></i>
+                </div>
+                <div class="col">
+                    <h4>¿Quiere confirmar la acción?</h4>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click) = "borrarComida()" class="btn btn-primary"  data-dismiss="modal">Aceptar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    

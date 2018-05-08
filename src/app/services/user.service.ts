@@ -11,10 +11,7 @@ export class UserService {
   // Listado usuarios obtenidos de firebase.
   userList: AngularFireList<any>;
   selectedUser: User = new User();
-  
-  // Objeto query para realizar consultas.
-  query:  Query;
-  
+
   constructor(
     private firebase: AngularFireDatabase
   ) { }

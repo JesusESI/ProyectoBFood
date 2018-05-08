@@ -14,6 +14,10 @@ export class AuthService {
   // Variable de sesión.
    private _isSignedIn: boolean;
 
+   // Variable que guarda el log del usuario.
+   public userLog: string;
+   
+
   // Inyección de dependencias.
   constructor(
     public serviceAuth: AngularFireAuth,
@@ -46,6 +50,7 @@ export class AuthService {
 
   // Loguearse con email y password
   loginUser (email: string, pass: string) {
+    this.userLog = email;
     return new Promise((resolve, reject) => {
       this.serviceAuth.auth.signInWithEmailAndPassword(email, pass)
       .then( 
@@ -56,6 +61,6 @@ export class AuthService {
 
   // Devolver datos usuario(Log).
   getDataUser() {
-    return this.serviceAuth.authState.map( auth => auth);
+   return this.serviceAuth.authState.map( auth => auth);
   }
-}
+} 

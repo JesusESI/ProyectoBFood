@@ -47,6 +47,7 @@ import { NavbarComponent } from './comun/navbar/navbar.component';
 import { UserService } from './services/user.service';
 import { ImageService } from './services/image-service.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ComidaService } from './services/comida.service';
 
 
 
@@ -91,6 +92,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     ImageService,
+    ComidaService,
     AuthService,
     UserService,
     AuthGuard
