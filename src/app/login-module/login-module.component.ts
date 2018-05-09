@@ -38,6 +38,7 @@ export class LoginModuleComponent implements OnInit {
         console.log(this.email);
         console.log(this.password);
         this.authService.isSignedIn = true;
+        this.authService.userLog = this.email;
         this.router.navigate(['principal']);
       }).catch( (err) => {
         console.log("El usuario no existe.")

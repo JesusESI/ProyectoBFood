@@ -1,3 +1,93 @@
-<p>
-  perfil-module works!
-</p>
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Módulo Perfil -->
+<div class="row">
+    <div class="col-12 mx-auto mt-5">
+      <div class="card">
+        <div class="card-header">
+            <h2>Perfil de usuario</h2>
+        </div>
+        <div class="card-body">
+            <form #userForm="ngForm" (ngSubmit) = "onSubmit(userForm)">
+                <fieldset>
+                      <!-- Imagen -->
+                         <!-- <div class="row form-group justify-content-lg-center">
+                             <div class="col-12">
+                                    <div class="container" *ngIf="this.imageURL | async; let url">
+                                        <img style="width: 200px; height: 200px;" [src]="url" alt="Image from AngularFireStorage">
+                                    </div> 
+                                <input type="file" (change)= "onFileSelected($event)" class="form-control-file" aria-describedby="fileHelp" accept=".png,.jpg">                            
+                                <progress max="100" [value]="(this.imageService.uploadProgress | async)"></progress>
+                            </div>
+                        </div>  -->
+                        <hr>
+                        <!--  Input nombre -->
+                        <div class = "row form-group">
+                            <div class="col-12">
+                                <input type="text" class="form-control" 
+                                id="nombreForm" aria-describedby="nombre" 
+                                placeholder="Nombre usuario" 
+                                name="nombre" [(ngModel)] ="this.userPerfil.nombre">
+                            </div>
+                        </div>
+                        <!-- Input apellidos -->
+                        <div class = "form-group row">
+                            <div class="col-12">
+                                <input type="text" class="form-control" 
+                                id="apellidosForm" aria-describedby="apellidos" 
+                                placeholder="Apellidos usuario"
+                                name="apellidos" [(ngModel)] = "this.userPerfil.apellidos">
+                            </div>
+                        </div>
+                        <!-- Input email -->
+                        <div class = "form-group row">
+                            <div class="col-12">
+                                <input type="email" class="form-control" 
+                                id="emailForm" aria-describedby="Email usuario" 
+                                placeholder="Email usuario"
+                                name="email" [(ngModel)] = "this.userPerfil.email">
+                            </div>
+                        </div>
+                        <!-- Input usuario -->
+                        <div class = "form-group row">
+                            <div class="col-12">
+                                    <input type="text" class="form-control" 
+                                    id="usuarioForm" aria-describedby="usuario" 
+                                    placeholder="Apodo usuario"
+                                    name="apodo" [(ngModel)] = "this.userPerfil.apodo">
+                            </div>
+                        </div>
+                        <!-- Input password -->
+                        <div class = "form-group row">
+                                <div class="col-12">
+                                        <input type="password" class="form-control" 
+                                        id="passwordForm" aria-describedby="password" 
+                                        placeholder="Contraseña usuario"
+                                        name="password" [(ngModel)] = "this.userPerfil.password">
+                                </div>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="col-3 mx-auto mt-2">
+                              <div class="card">
+                                <div class="card-body d-flex justify-content-around">
+                                  <button type="submit" class="btn btn-info">Modificar</button>
+                                  <button type="button" (click) = "closeModulo()" class="btn btn-primary .botones">Cancelar</button>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                    </fieldset>
+                  </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Alerta de login incorrecto -->
+  <div *ngIf="this.notAuthenticated" class="alert alert-dismissible alert-primary">
+      <button type="submit" (click) = "this.notAuthenticated = false" class="close" data-dismiss="alert">&times;</button>
+        <h4> <strong>Datos de usuarios incorrectos</strong> </h4>
+        Compruebe que el email y la contraseña son correctos.
+  </div>
+  

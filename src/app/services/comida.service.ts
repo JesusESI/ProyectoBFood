@@ -18,14 +18,14 @@ export class ComidaService {
     return this.comidaList = this.firebase.list('Comidas');
   }
 
-  añadirComidaDatabase(comida: Comida, propietario: string) {
+  añadirComidaDatabase(comida: Comida, propietario: string, imagen: string) {
     // Lo añadimos a la lista existente de productos.
     this.comidaList.push({
       nombre: comida.nombre,
       tipo: comida.tipo,
       ingredientes: comida.ingredientes,
       descripcion: comida.descripcion,
-      imagen: comida.imagen,
+      imagen: imagen,
       propietario: propietario
     });
   }

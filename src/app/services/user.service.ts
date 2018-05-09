@@ -4,6 +4,7 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { User } from '../entidades/user';
 import { Query } from '@firebase/database/dist/src/api/Query';
 import { FirebaseDatabase } from '@firebase/database-types';
+import { query } from '@angular/animations';
 
 @Injectable()
 export class UserService {
@@ -18,10 +19,14 @@ export class UserService {
 
   getUsuarios() {
     // Da la tabla de usuarios para manejar los datos
-    return this.userList = this.firebase.list('Usuarios');
+    if(this.userList === undefined) {
+      return this.userList = this.firebase.list('Usuarios');
+    } else {
+      return this.userList;
+    }  
   }
 
-  añadirUsuarioDatabase(usuario: User) {
+  añadirUsuarioDatabase(usuario: User, imagen: string) {
     // Lo añadimos a la lista existente de productos.
     this.userList.push({
       nombre: usuario.nombre,
@@ -29,7 +34,7 @@ export class UserService {
       apodo: usuario.apodo,
       email: usuario.email,
       password: usuario.password,
-      imagen: "IconoUsuario.png"
+      imagen: imagen
     });
   }
 

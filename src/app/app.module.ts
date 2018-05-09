@@ -48,6 +48,8 @@ import { UserService } from './services/user.service';
 import { ImageService } from './services/image-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ComidaService } from './services/comida.service';
+import { BeaconService } from './services/beacon.service';
+import { PerfilService } from './services/perfil.service';
 
 
 
@@ -93,6 +95,8 @@ import { ComidaService } from './services/comida.service';
   providers: [
     ImageService,
     ComidaService,
+    BeaconService,
+    PerfilService,
     AuthService,
     UserService,
     AuthGuard

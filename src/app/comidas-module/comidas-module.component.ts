@@ -72,14 +72,8 @@ export class ComidasModuleComponent implements OnInit {
        if (this.displayComida && this.displayComidaModificar) {
          this.modificarComida(this.comidaservice.selectedComida, ComidaForm);
        } else {
-         console.log(this.imagen);
-         if (this.imagen == undefined) {
-          this.imageService.obtenerReferenciaImagen("IconoComida.png");
-         } else {
-          this.imageService.obtenerReferenciaImagen(this.imagen);
-         }
-         
-         this.comidaservice.añadirComidaDatabase(this.comidaservice.selectedComida, this.authService.userLog);
+        
+         this.comidaservice.añadirComidaDatabase(this.comidaservice.selectedComida, this.authService.userLog, this.imagen);
          this.resetForm(ComidaForm);
          this.displayComida = false;
    
@@ -135,13 +129,15 @@ export class ComidasModuleComponent implements OnInit {
  
    displayVentanaComida(ComidaForm: NgForm) {
     this.imageService.obtenerReferenciaImagen("IconoComida.png");
-     this.displayComida = true;
+    this.imagen = "IconoComida.png";
+    this.displayComida = true;
      // Limpar las variables también y cerrar ventana.
      this.resetForm(ComidaForm);
    }
  
    displayVentanaComidaModificar(Comida: Comida) {
      this.imageService.obtenerReferenciaImagen(Comida.imagen);
+     this.imagen = Comida.imagen;
      this.displayComida = true;
      this.displayComidaModificar = true;
      // Ponemos los datos del Comida en el form.

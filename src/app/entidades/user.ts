@@ -10,6 +10,9 @@ export class User {
     password: string;
     // UrlImagen
     imagen: string;
+    // Variaboles de control para eventos aceptados.
+    eventosAceptados: number;
+    eventosNoAceptados: number;
 
     constructor() {}
 

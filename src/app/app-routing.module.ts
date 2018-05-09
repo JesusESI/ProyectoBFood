@@ -29,10 +29,10 @@ const routes: Routes = [
   { path: 'principal/gestionarComidas', component: ComidasModuleComponent},
   { path: 'principal/estadisticas', component: EstadisticasModuleComponent},
   { path: 'principal/gestionarEventos', component: EventosModuleComponent},
-  { path: 'principal/administrarPerfil', component: PerfilModuleComponent, canActivate:[AuthGuard]},
+  { path: 'principal/administrarPerfil', component: PerfilModuleComponent},
   { path: '**', component: NotFoundPageComponent}
 ];
-
+//  canActivate:[AuthGuard]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

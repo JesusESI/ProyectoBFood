@@ -1,3 +1,160 @@
-<p>
-  beacons-module works!
-</p>
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Principal</li>
+        <li class="breadcrumb-item active" aria-current="page">Beacons</li>
+    </ol>
+</nav>
+
+<!-- Alerta de acción -->
+<div *ngIf = "this.displayMsg" class="alert alert-dismissible alert-info">
+    <button type="button" (click) = "onCloseAlert()" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">{{msg}}</p>
+</div>
+
+<p-accordion [multiple]="true">
+    <!-- Filtro de Busqueda -->
+    <p-accordionTab header = "Filtrar Beacon" [selected] = "true">
+        <form action="onBuscar()">
+            <div class="row">
+                <div class="col">
+                    <label for="filtro">Filtro</label>
+                    <input type="text" name="text" pTooltip="filtro" id="filtro"  
+                    class="form-control" placeholder="<Todo>" [(ngModel)] = "this.filtro">
+               </div>
+            </div>
+            <div class="row">
+                <div class="col mt-3">
+                    <input type="submit" (click)= "buscarBeacon()" value="Buscar" class="btn btn-outline-info btn-lg">
+                </div>
+            </div>
+    </form>
+    </p-accordionTab>
+
+    <!-- Tabla de Beacons -->
+    <p-accordionTab header = "Tabla de Beacons" [selected] = "true">
+        <p-table [value]="beaconList" [columns]="cols" [paginator]="true" [rows]="8" dataKey="id" >
+            <ng-template  pTemplate="caption">
+                <div class="ui-helper-clearfix">
+                    <button type="button" pButton icon="fa-plus" iconPos="left" label="Agregar" (click)="displayVentanaBeacon()" style="float:right"></button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns >
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                        <th style="width:3em"></th>
+                        <th style="width:3em"></th>
+                    </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <!-- Importante para la seleccion de las columnas -->
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">
+                      {{rowData[col.field]}}
+                    </td>
+                    <td>
+                        <button pButton (click)="displayVentanaBeaconModificar(rowData)" icon="fa-edit" title="Editar" class="ui-button-success"></button>
+                    </td>
+                    <td>
+                        <button pButton (click)= "onButtonRemove(rowData)" data-toggle="modal" data-target="#mensaje" icon="fa-remove" title="Borrar"  class="ui-button-danger"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-accordionTab>
+</p-accordion>
+
+<!-- Overlays -->
+<p-dialog header="Beacons" [(visible)]="displayBeacon" [width]="450" [modal]="true" [responsive]="true">
+        <!-- Alert de campos -->
+        <div *ngIf="this.displayMsgAlert" class="alert alert-dismissible alert-primary">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{this.msg}}</strong> 
+        </div>
+        <form #BeaconForm="ngForm" (ngSubmit) = "onSubmit(BeaconForm)">
+            <fieldset>
+                    <!--  Input ID -->
+                    <div class = "row form-group">
+                        <div class="col-12">
+                          <div class="mx-auto">
+                            <input type="text" class="form-control" 
+                            id="idForm" aria-describedby="id" 
+                            placeholder="ID" 
+                            name="id" [(ngModel)] ="this.beaconservice.selectedBeacon.id">
+                          </div>
+                        </div>
+                    </div>
+                
+                    <!--  Input Nombre -->
+                    <div class = "row form-group">
+                      <div class="col-12">
+                        <div class="mx-auto">
+                          <input type="text" class="form-control" 
+                          id="nombreForm" aria-describedby="nombre" 
+                          placeholder="Nombre" 
+                          name="nombre" [(ngModel)] ="this.beaconservice.selectedBeacon.nombre">
+                        </div>
+                      </div>
+                  </div>
+  
+                  <!-- Input Latitud -->
+                  <div class = "form-group row">
+                      <div class="col-12">
+                        <div class="mx-auto">
+                              <input type="number" class="form-control" 
+                              id="LatitudForm" aria-describedby="Latitud" 
+                              placeholder="Latitud Beacon" rows="3"
+                              name="latitud" [(ngModel)] ="this.beaconservice.selectedBeacon.latitud">
+                          </div>
+                      </div>
+                  </div>
+
+                  <!-- Input Latitud -->
+                  <div class = "form-group row">
+                    <div class="col-12">
+                      <div class="mx-auto">
+                            <input type="number" class="form-control" 
+                            id="LongitudForm" aria-describedby="Longitud" 
+                            placeholder="Longitud Beacon" rows="3"
+                            name="longitud" [(ngModel)] ="this.beaconservice.selectedBeacon.longitud">
+                        </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf= "this.displayBeacon" class="modal-footer">
+                      <button type="submit" class="btn btn-info">Aceptar</button>
+                      <button type="button" (click) = "closeVentanaBeacon()" class="btn btn-primary .botones">Cancelar</button>
+                  </div>
+                </fieldset>
+              </form>
+</p-dialog>
+
+<!-- Overlay confirmar eliminar -->
+<div class="modal" id="mensaje" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <i class="fa fa-warning" style="font-size:36px"></i>
+                </div>
+                <div class="col">
+                    <h4>¿Quiere confirmar la acción?</h4>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click) = "borrarBeacon()" class="btn btn-primary"  data-dismiss="modal">Aceptar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    

@@ -70,7 +70,8 @@ export class UsuariosModuleComponent implements OnInit {
       if (this.displayUsuario && this.displayUsuarioModificar) {
         this.modificarUsuario(this.userService.selectedUser, userForm);
       } else {
-        this.userService.añadirUsuarioDatabase(userForm.value);
+
+        this.userService.añadirUsuarioDatabase(userForm.value, this.imagen);
         this.resetForm(userForm);
         this.displayUsuario = false;
   
@@ -98,10 +99,6 @@ export class UsuariosModuleComponent implements OnInit {
     } 
   }
 
-  onFilter() {
-    
-  }
-
   resetForm(userForm?: NgForm)  {
     if(userForm != null) {
       userForm.reset();
@@ -124,6 +121,7 @@ export class UsuariosModuleComponent implements OnInit {
 
   displayVentanaUsuario(userForm: NgForm) {
     this.imageService.obtenerReferenciaImagen("IconoUsuario.png");
+    this.imagen = "IconoUsuario.png";
     this.displayUsuario = true;
     // Limpar las variables también y cerrar ventana.
     this.resetForm(userForm);
@@ -131,6 +129,7 @@ export class UsuariosModuleComponent implements OnInit {
 
   displayVentanaUsuarioModificar(user: User) {
     this.imageService.obtenerReferenciaImagen(user.imagen);
+    this.imagen = user.imagen;
     this.displayUsuario = true;
     this.displayUsuarioModificar = true;
     // Ponemos los datos del usuario en el form.
