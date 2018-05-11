@@ -1,3 +1,209 @@
-<p>
-  eventos-module works!
-</p>
+<!-- Navbar -->
+<app-navbar></app-navbar>
+
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Principal</li>
+        <li class="breadcrumb-item active" aria-current="page">Eventos</li>
+    </ol>
+</nav>
+
+<!-- Alerta de acción -->
+<div *ngIf = "this.displayMsg" class="alert alert-dismissible alert-info">
+    <button type="button" (click) = "onCloseAlert()" class="close" data-dismiss="alert">&times;</button>
+    <p class="mb-0">{{msg}}</p>
+</div>
+
+<p-accordion [multiple]="true">
+    <!-- Filtro de Busqueda -->
+    <p-accordionTab header = "Filtrar Eventos" [selected] = "true">
+        <form>
+            <div class="row">
+                <div class="col">
+                    <label for="filtro">Filtro</label>
+                    <input type="text" name="text" pTooltip="filtro" id="filtro"  
+                    class="form-control" placeholder="<Todo>" [(ngModel)] = "this.filtro">
+               </div>
+            </div>
+            <div class="row">
+                <div class="col mt-3">
+                    <input type="submit" (click)= "buscarEvento()" value="Buscar" class="btn btn-outline-info btn-lg">
+                </div>
+            </div>
+    </form>
+    </p-accordionTab>
+
+    <!-- Tabla de Eventos -->
+    <p-accordionTab header = "Tabla de Eventos" [selected] = "true">
+        <p-table [value]="eventoList" [columns]="cols" [paginator]="true" [rows]="8" 
+         dataKey="$key" >
+            <ng-template  pTemplate="caption">
+                <div class="ui-helper-clearfix">
+                    <button type="button" pButton icon="fa-plus" iconPos="left" label="Agregar" (click)="displayVentanaEvento()" style="float:right"></button>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns >
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                        <th style="width:3em"></th>
+                        <th style="width:3em"></th>
+                    </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <!-- Importante para la seleccion de las columnas -->
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">{{rowData[col.field]}}</td>
+                    <td>
+                        <button pButton (click)="displayVentanaEventoModificar(rowData)" icon="fa-edit" title="Editar" class="ui-button-success"></button>
+                    </td>
+                    <td>
+                        <button pButton (click)= "onDeleteEvent(rowData)" data-toggle="modal" data-target="#mensaje" icon="fa-remove" title="Borrar"  class="ui-button-danger"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-accordionTab>
+</p-accordion>
+
+<!-- Overlays -->
+<p-dialog header="Evento" [(visible)]="displayEvento" [width]="450" [modal]="true" [responsive]="true">
+        <!-- Alert de campos -->
+        <div *ngIf="this.displayMsgAlert" class="alert alert-dismissible alert-primary">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>{{this.msg}}</strong> 
+        </div>
+        <form #eventoForm="ngForm" (ngSubmit) = "onSubmit()">
+            <fieldset>
+                    <!--  Input nombre -->
+                    <div class = "row form-group">
+                        <div class="col-12">
+                            <input type="text" class="form-control" 
+                            id="nombreForm" aria-describedby="nombre" 
+                            placeholder="Nombre Evento" 
+                            name="nombre" [(ngModel)] = "this.nombreForm" >
+                        </div>
+                    </div>
+                    <!-- Input Nombre restaurante -->
+                    <div class = "form-group row">
+                        <div class="col-12">
+                            <input type="text" class="form-control" 
+                            id="restauranteForm" aria-describedby="restaurante" 
+                            placeholder="Restaurante Evento"
+                            name="restaurante" [(ngModel)] = "this.restauranteForm">
+                        </div>
+                    </div>
+                
+                    <!-- Input tipo -->
+                    <div class="row form-group">
+                      <div class="col-12">
+                        <select class="form-control" id="tipoSelect" placeholder="Tipo comida" 
+                        name="tipo" [(ngModel)] = "this.tipoForm">
+                          <option value="Reto Comida">Reto Comida</option>
+                          <option value="Degustación gastronómica">Degustación gastronómica</option>
+                          <option value="Inauguración restaurante">Inauguración restaurante</option>
+                          <option value="Otro">Otro</option>
+                        </select>
+                      </div>
+                    </div>
+                    <!-- Input FechaIncicio -->
+                    <div class = "form-group row">
+                        <div class = "col-6">
+                          <!-- FechaInicio -->
+                          <label for="fechaInicio">Desde</label>
+                          <p-calendar name="fechaInicio" id="fechaInicio" [showTime]="true" hourFormat="24" [locale]="this.es" dateFormat="dd/mm/yy" [(ngModel)]="this.fechaInicioForm" [showIcon]="true"></p-calendar> 
+                        </div>
+                        <div class="col-6">
+                            <!-- FechaFin -->
+                            <label for="fechaFin">Hasta</label>
+                            <p-calendar name="fechaFin" id="fechaFin" [showTime]="true" hourFormat="24" [locale]="this.es" dateFormat="dd/mm/yy" [(ngModel)]="this.fechaFinForm" [showIcon]="true"></p-calendar> 
+                          </div>
+                    </div>
+                  
+                   <!-- Input BeaconList -->
+                   <div class="row form-group">
+                    <div class="col-12">
+                        <label>Elegir beacon</label>
+                        <p-dropdown [options]="this.groupedBeacons" id = "beaconForm" name="beaconForm" [(ngModel)]="this.beaconForm" 
+                        (onChange)="cambiarBeaconForm($event)"[style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                  </div>
+
+                  <!-- Input listado de comidas -->
+                  <div class = "row form-group ">
+                    <div class="col-10">
+                        <textarea class="form-control" 
+                        id="comidasForm" aria-describedby="comidas" 
+                        placeholder="Añadir comidas" 
+                        name="comidas" [(ngModel)] ="this.comidasForm" [disabled]="true"></textarea>
+                    </div>
+                    <div class="col-2">
+                        <button type="button" pButton icon="fa-plus" (click) = "displayVentanaComidas()" class="btn btn-info"></button>
+                    </div>
+                  </div>
+
+                    <!-- Input descripcion -->
+                    <div class = "row form-group">
+                      <div class="col-12">
+                          <textarea class="form-control" 
+                          id="descripcionForm" aria-describedby="descripcion" 
+                          placeholder="Descripcion Evento" rows="3"
+                          name="descripcion" [(ngModel)] ="this.descripcionForm"></textarea>
+                      </div>
+                    </div>
+              
+                    <div *ngIf= "this.displayEvento" class="modal-footer">
+                        <button type="submit" class="btn btn-info">Aceptar</button>
+                        <button type="button" (click) = "closeVentanaEvento()" class="btn btn-primary .botones">Cancelar</button>
+                    </div>
+                </fieldset>
+              </form>
+</p-dialog>
+
+<!-- Overlay confirmar eliminar -->
+<div class="modal" id="mensaje" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <i class="fa fa-warning" style="font-size:36px"></i>
+                </div>
+                <div class="col">
+                    <h4>¿Quiere confirmar la acción?</h4>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" (click) = "borrarEvento()" class="btn btn-primary"  data-dismiss="modal">Aceptar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay para elegir Comidas -->
+  <p-dialog header="Evento" [(visible)]="this.displayComidas" [width]="450" [modal]="true" [responsive]="true">
+    <div class="row form-group">
+        <div class="col-12">
+              <p-pickList id="pick" [source]="this.initialComidaList" [target]="this.targetComidasList" [responsive]="true" sourceHeader="Disponibles" targetHeader="Elegidas">
+                <ng-template let-comida pTemplate="item">
+                    <div class="ui-helper-clearfix">
+                        <!-- <img src="assets/showcase/images/demo/car/{{car.brand}}.png" style="display:inline-block;margin:2px 0 2px 2px" width="48"> -->
+                        <div style="font-size:13px;float:center;margin:5px 5px 0 0">{{comida.nombre}} - {{comida.tipo}}</div>
+                    </div>
+                </ng-template>
+            </p-pickList>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click) = "aceptarComidas()" class="btn btn-info"  data-dismiss="modal">Aceptar</button>
+        <button type="button" (click) = "cancelarComidas()" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
+    </div> 
+  </p-dialog>
+
+
+    

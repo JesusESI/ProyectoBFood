@@ -14,8 +14,12 @@ export class ComidaService {
   ) { }
 
   getComidas() {
-    // Da la tabla de usuarios para manejar los datos
-    return this.comidaList = this.firebase.list('Comidas');
+    if (this.comidaList == undefined) {
+      return this.comidaList = this.firebase.list('Comidas');
+    } else {
+      return this.comidaList;
+    }
+    
   }
 
   añadirComidaDatabase(comida: Comida, propietario: string, imagen: string) {

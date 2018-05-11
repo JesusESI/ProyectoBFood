@@ -13,7 +13,11 @@ export class BeaconService {
    ) { }
  
    getBeacons() {
-     return this.beaconList = this.firebase.list('Beacons');
+     if (this.beaconList == undefined) {
+      return this.beaconList = this.firebase.list('Beacons');
+     } else {
+      return this.beaconList;
+     }   
    }
  
    añadirBeaconDatabase(beacon: Beacon, propietario: string) {

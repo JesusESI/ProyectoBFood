@@ -103,11 +103,11 @@
                       <select class="form-control" id="tipoSelect" placeholder="Tipo comida" 
                       name="tipo" [(ngModel)] ="this.comidaservice.selectedComida.tipo">
                         <option value="Variada">Variada</option>
-                        <option>Carne</option>
-                        <option>Pasta</option>
-                        <option>Pescado</option>
-                        <option>Vegetales</option>
-                        <option>Otros</option>
+                        <option value="Carne">Carne</option>
+                        <option value="Pasta">Pasta</option>
+                        <option value="Pescado">Pescado</option>
+                        <option value="Vegetales">Vegetales</option>
+                        <option value="Otros">Otros</option>
                       </select>
                       </div>
                     </div>
@@ -119,6 +119,11 @@
                                 id="IngredientesForm" aria-describedby="Ingredientes" 
                                 placeholder="Ingredientes Comida" rows="3"
                                 name="ingredientes" [(ngModel)] ="this.comidaservice.selectedComida.ingredientes"></textarea>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-outline-primary">
+                                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
                         </div>
                     </div>
                     <!-- Input descripcion -->

@@ -28,6 +28,10 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TooltipModule } from 'primeng/tooltip'
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule}  from 'primeng/message';
+import { CalendarModule } from 'primeng/calendar';
+import { PickListModule } from 'primeng/picklist';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 // Import mportamosI los servicios (providers).
@@ -50,6 +54,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComidaService } from './services/comida.service';
 import { BeaconService } from './services/beacon.service';
 import { PerfilService } from './services/perfil.service';
+import { EventoService } from './services/evento.service';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -85,9 +91,13 @@ import { PerfilService } from './services/perfil.service';
     BrowserAnimationsModule,
     OverlayPanelModule,
     DialogModule,
+    CalendarModule,
     TooltipModule,
     MessageModule,
     MessagesModule,
+    PickListModule,
+    MultiSelectModule,
+    DropdownModule,
     HttpClientModule,
     AngularFireStorageModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
@@ -97,6 +107,7 @@ import { PerfilService } from './services/perfil.service';
     ComidaService,
     BeaconService,
     PerfilService,
+    EventoService,
     AuthService,
     UserService,
     AuthGuard
