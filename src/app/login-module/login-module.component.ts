@@ -36,7 +36,7 @@ export class LoginModuleComponent implements OnInit {
     this.authService.loginUser(this.email, this.password)
       .then( (res) => {
         console.log(this.email);
-        console.log(this.password);
+        // console.log(this.password);
         this.authService.isSignedIn = true;
         this.authService.userLog = this.email;
         this.router.navigate(['principal']);

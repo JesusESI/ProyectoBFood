@@ -117,7 +117,7 @@ export class BeaconsModuleComponent implements OnInit {
             this.beaconList.push(x as Beacon);
            }
            
-         })
+         });
        });
    }
  

@@ -31,6 +31,9 @@ export class EventosModuleComponent implements OnInit {
   // DropDownBeacons
   groupedBeacons: SelectItem[] = [];
 
+  // Lista de comidas que se pasará para almacenar.
+  private comidasTargetForm: any[] = [];
+
   // Columnas de la tabla.
   private cols = [
     { field: "nombre", header:"Nombre"},
@@ -57,7 +60,7 @@ export class EventosModuleComponent implements OnInit {
   private restauranteForm: string = "";
   private tipoForm: string = "Otro";
   private fechaInicioForm: Date = new Date();
-  private fechaFinForm: Date = new Date();
+  private fechaFinForm: Date = new Date()
   private beaconForm: Beacon;
   private comidasForm: string = "";
   private descripcionForm: string = "";
@@ -146,18 +149,9 @@ export class EventosModuleComponent implements OnInit {
   }
 
   onSubmit() {
-    // console.log(this.nombreForm);
-    // console.log(this.restauranteForm);
-    // console.log(this.tipoForm);
-    // console.log(this.fechaInicioForm);
-    // console.log(this.fechaFinForm);
-    // console.log(this.beaconForm);
-    // console.log(this.descripcionForm);
-    // console.log(this.targetComidasList);
-
     if (this.checkData()) {
       if (this.displayEvento && this.displayModificarEvento) {
-        // Añadir modificar evento
+        console.log("Modificando Evento...");
         this.modificarEvento();
       } else {
         // Crear Objeto evento.
@@ -181,8 +175,8 @@ export class EventosModuleComponent implements OnInit {
   checkData(): boolean {
   
      if ((this.nombreForm && this.restauranteForm && this.tipoForm
-       && this.fechaInicioForm && this.fechaFinForm && this.beaconForm && this.descripcionForm
-       && this.targetComidasList) !== undefined ) {
+       && this.fechaInicioForm && this.fechaFinForm && this.beaconForm && this.descripcionForm) !== undefined 
+       && this.targetComidasList.length > 0) {
        if ((this.nombreForm && this.restauranteForm && this.tipoForm
         && this.fechaInicioForm && this.fechaFinForm && this.beaconForm && this.descripcionForm) !== "" ) {
          return true;
@@ -218,15 +212,6 @@ export class EventosModuleComponent implements OnInit {
   }
 
    crearInstanciaEvento() {
-    // nombre: evento.nombre,
-    // descripcion: evento.descripcion,
-    // restaurante: evento.restaurante,
-    // tipo: evento.tipo,
-    // FechaInicio: evento.FechaInicio.toDateString,
-    // FechaFin: evento.FechaFin.toDateString,
-    // beacon: evento.beacon,
-    // comidas: evento.comidas,
-    // propietario: evento.propietario
     this.eventoForm.nombre = this.nombreForm;
     this.eventoForm.descripcion = this.descripcionForm;
     this.eventoForm.restaurante = this.restauranteForm;
@@ -234,7 +219,7 @@ export class EventosModuleComponent implements OnInit {
     this.eventoForm.FechaInicio = this.fechaInicioForm;
     this.eventoForm.FechaFin = this.fechaFinForm;
     this.eventoForm.beacon = this.beaconForm;
-    this.eventoForm.comidas = this.targetComidasList;
+    this.eventoForm.comidas = this.comidasTargetForm;
     this.eventoForm.propietario = this.authService.userLog;
    }
 
@@ -248,10 +233,10 @@ export class EventosModuleComponent implements OnInit {
     this.selectedEventoTable.FechaInicio = this.fechaInicioForm;
     this.selectedEventoTable.FechaFin = this.fechaFinForm;
     this.selectedEventoTable.beacon = this.beaconForm;
-    this.selectedEventoTable.comidas = this.targetComidasList;
+    this.selectedEventoTable.comidas = this.comidasTargetForm;
 
     console.log(this.selectedEventoTable);
-    this.msg = "El usuario ha sido modificado correctamente";
+    this.msg = "El evento ha sido modificado correctamente";
     this.displayMsg = true;
     
     this.eventoService.actualizarEventoDatabase(this.selectedEventoTable);
@@ -266,7 +251,7 @@ export class EventosModuleComponent implements OnInit {
     this.beaconList.forEach(element => { 
       this.groupedBeacons.push({ 
         label: element.nombre, 
-        value: {key: element.$key,
+        value: {
                 id: element.id,
                 nombre: element.nombre,
                 latitud: element.latitud,
@@ -290,10 +275,63 @@ export class EventosModuleComponent implements OnInit {
   }
 
   displayVentanaEventoModificar(evento: Evento) {
+    console.log(evento);
+    
+    this.selectedEventoTable = evento;
+    // Agregamos los datos del evento actual al form.
+    this.nombreForm = this.selectedEventoTable.nombre;
+    this.restauranteForm = this.selectedEventoTable.restaurante;
+    this.descripcionForm = this.selectedEventoTable.descripcion;
+    this.tipoForm = this.selectedEventoTable.tipo;
+    //this.fechaInicioForm = evento.FechaInicio;
+    //this.fechaFinForm = evento.FechaFin;
+    this.parsearFechas(String(evento.FechaInicio), String(evento.FechaFin));
+    this.beaconForm = this.selectedEventoTable.beacon;
+    this.leerComidas();
+
     this.displayEvento = true;
     this.displayModificarEvento = true;
-    // Ponemos los datos del usuario en el form.
-    this.selectedEventoTable = evento;
+  }
+
+  parsearFechas(fechaI: string, fechaF: string) {
+
+    this.fechaInicioForm = this.construirFecha(fechaI);
+    this.fechaFinForm = this.construirFecha(fechaF)
+  }
+
+  construirFecha(fecha: string): Date {
+
+    let arrayFecha = fecha.split('/');
+    let arrayTiempo = arrayFecha[2].split('');
+
+
+    console.log(arrayFecha);
+    console.log(arrayTiempo);
+    
+     let año: string = arrayTiempo[0] + arrayTiempo[1] + arrayTiempo[2] + arrayTiempo[3];
+     //console.log(año);
+     let mes: string = arrayFecha[1];
+     //console.log(mes);
+     let dia: string = arrayFecha[0];
+     //console.log(dia);
+     let hora: string;
+     let minutos: string;
+     let segundos: string;
+
+     if (arrayTiempo[6] === ":") {
+      hora = arrayTiempo[5];
+      minutos = arrayTiempo[7] + arrayTiempo[8];
+      segundos = arrayTiempo[10] + arrayTiempo[11];
+     } else {
+      hora = arrayTiempo[5] + arrayTiempo[6];
+      minutos = arrayTiempo[8] + arrayTiempo[9];
+      segundos = arrayTiempo[11] + arrayTiempo[12];
+     }
+     //console.log(hora);
+     //console.log(minutos);
+     //console.log(segundos);
+  
+    return new Date(Number(año), Number(mes), Number(dia), Number(hora), Number(minutos), Number(segundos));
   }
 
   onCloseAlert() {
@@ -305,6 +343,8 @@ export class EventosModuleComponent implements OnInit {
     // llamar al reset form.
     this.displayEvento = false;
     this.displayModificarEvento = false;
+
+    this.comidasTargetForm = [];
 
     this.resetForm();
   }
@@ -320,10 +360,16 @@ export class EventosModuleComponent implements OnInit {
     this.selectedEventoTable = rowData;
   }
 
+  leerComidas(){
+    this.comidasForm = "";
+    let aux = this.selectedEventoTable.comidas;
+
+    for (let i: number = 0; i < Object.keys(aux).length; i++) {
+      this.comidasForm = this.comidasForm + aux[i].nombre + " - " + aux[i].tipo + "\n";
+    }
+  }
+
   aceptarComidas() {
-    console.log("Listas de comidas inicial y elegidas.")
-    console.log(this.comidaList);
-    console.log(this.targetComidasList);
     this.comidasForm = "";
 
     // Para cada elemento comida añadirlo como texto en el panel.
@@ -332,10 +378,28 @@ export class EventosModuleComponent implements OnInit {
     });
     // Cerramos la ventana de comidas
     this.displayComidas = false;
+    // Introducimos los elementos que s ele pasarán a firebase.
+    this.pushTargetComidasForm();
+    console.log(this.targetComidasList);
+    console.log(this.comidasTargetForm);
+  }
+
+  pushTargetComidasForm() {
+    this.targetComidasList.forEach(element => {
+      this.comidasTargetForm.push({
+        nombre: element.nombre,
+        tipo: element.tipo,
+        ingredientes: element.ingredientes,
+        descripcion: element.descripcion,
+        imagen: element.imagen,
+        propietario: element.propietario
+      });
+    });
   }
 
   cancelarComidas() {
     this.displayComidas = false;
+    this.comidasTargetForm = [];
   }
 
   cambiarBeaconForm(event: any) {
