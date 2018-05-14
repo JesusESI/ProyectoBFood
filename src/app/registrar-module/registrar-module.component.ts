@@ -5,6 +5,8 @@ import { AuthService } from "../services/auth.service";
 
 // Importar Router, para redirecionarnos.
 import { Router } from "@angular/router";
+import { UserService } from '../services/user.service';
+import { User } from '../entidades/user';
 
 @Component({
   selector: 'app-registrar-module',
@@ -30,6 +32,7 @@ export class RegistrarModuleComponent implements OnInit {
   // Inyección servicio Auth.
   constructor(
     public authService: AuthService,
+    public userService: UserService,
     public router: Router
   ) { }
 
@@ -109,6 +112,17 @@ export class RegistrarModuleComponent implements OnInit {
           this.checkErr(err);
         }
       )
+      // Registramos al nuevo usaurio en la base de datos.
+      let nuevoUsuario: User = new User();
+      nuevoUsuario.nombre = this.nombre;
+      nuevoUsuario.apellidos = this.apellidos;
+      nuevoUsuario.apodo = this.usuario;
+      nuevoUsuario.email = this.email;
+      nuevoUsuario.password = this.password;
+      let imagen: string = "IconoUsuario.png";
+      
+      this.userService.getUsuarios();
+      this.userService.añadirUsuarioDatabase(nuevoUsuario, imagen);
   }
 
   closeAlert() {

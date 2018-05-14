@@ -32,7 +32,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { PickListModule } from 'primeng/picklist';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
-
+import { ChartModule } from 'primeng/chart';
 
 // Import mportamosI los servicios (providers).
 import { AuthService } from "./services/auth.service";
@@ -100,6 +100,7 @@ import { CommonModule } from '@angular/common';
     DropdownModule,
     HttpClientModule,
     AngularFireStorageModule,
+    ChartModule,
     AngularFireModule.initializeApp(environment.firebaseConfig)
   ],
   providers: [
