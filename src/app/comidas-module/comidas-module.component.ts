@@ -72,6 +72,12 @@ export class ComidasModuleComponent implements OnInit {
        if (this.displayComida && this.displayComidaModificar) {
          this.modificarComida(this.comidaservice.selectedComida, ComidaForm);
        } else {
+
+         this.comidaservice.selectedComida.nombre = ComidaForm.value.nombre
+         this.comidaservice.selectedComida.tipo = ComidaForm.value.tipo;
+         this.comidaservice.selectedComida.ingredientes = ComidaForm.value.ingredientes;
+         this.comidaservice.selectedComida.descripcion = ComidaForm.value.descripcion;
+         this.comidaservice.selectedComida.propietario = this.authService.userLog;
         
          this.comidaservice.añadirComidaDatabase(this.comidaservice.selectedComida, this.authService.userLog, this.imagen);
          this.resetForm(ComidaForm);
@@ -88,7 +94,7 @@ export class ComidasModuleComponent implements OnInit {
    }
  
    checkForm(ComidaForm: NgForm): boolean {
-    console.log(ComidaForm);
+    //console.log(ComidaForm);
      if ((ComidaForm.value.nombre && ComidaForm.value.tipo && ComidaForm.value.ingredientes 
        && ComidaForm.value.descripcion) !== undefined ) {
        if ((ComidaForm.value.nombre && ComidaForm.value.tipo && ComidaForm.value.ingredientes 
@@ -127,17 +133,21 @@ export class ComidasModuleComponent implements OnInit {
        });
    }
  
-   displayVentanaComida(ComidaForm: NgForm) {
+   displayVentanaComida() {
     this.imageService.obtenerReferenciaImagen("IconoComida.png");
     this.imagen = "IconoComida.png";
+    // Por defecto tipo de comida.
+    this.comidaservice.selectedComida.tipo = "Variada"
+    this.comidaservice.selectedComida.imagen = this.imagen;
     this.displayComida = true;
      // Limpar las variables también y cerrar ventana.
-     this.resetForm(ComidaForm);
+     //this.resetForm();
    }
  
    displayVentanaComidaModificar(Comida: Comida) {
      this.imageService.obtenerReferenciaImagen(Comida.imagen);
      this.imagen = Comida.imagen;
+     this.comidaservice.selectedComida.imagen = this.imagen;
      this.displayComida = true;
      this.displayComidaModificar = true;
      // Ponemos los datos del Comida en el form.
